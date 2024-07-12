@@ -1,62 +1,63 @@
-#include <iostream>
-
+#include<iostream>
+#include<string>
 using namespace std;
 
-class Complex {
+class Student{
 private:
-    double real;
-    double imaginary;
-
+string* name;
+int* age;
 public:
-    // Constructors
-    Complex() : real(0.0), imaginary(0.0) {}
-    Complex(double r, double i) : real(r), imaginary(i) {}
 
-    // Overload operator+ to add two complex numbers
-    Complex operator+(const Complex& other) const {
-        return Complex(real + other.real, imaginary + other.imaginary);
-    }
+Student(){      //default constructor
+   cout<< "Default Constructor called"<<endl;
+   name = new string;
+   *name = "Student";
+   age = new int;
+   *age = 00;
+}
+ Student(string sname, int sage){     // parameterized constructor
+    cout<<"Paramertised constructor called"<< endl;
+    name = new string;
+    age = new int;
+    *name = sname;
+    *age = sage;
+ };
 
-    // Overload operator* to multiply two complex numbers
-    Complex operator*(const Complex& other) const {
-        double result_real = real * other.real - imaginary * other.imaginary;
-        double result_imaginary = real * other.imaginary + imaginary * other.real;
-        return Complex(result_real, result_imaginary);
-    }
+ Student(Student& t){       // copy constructor
+    cout<<"Copy constructor called"<< endl;
+    age = new int;
+    name = new string;
+    *name = *t.name;
+    *age = *t.age;
+ };
 
-    // Overload operators << and >> to print and read Complex Numbers
-    friend ostream& operator<<(ostream& os, const Complex& complex) {
-        os << complex.real << "+" << complex.imaginary << "i";
-        return os;
-    }
+ Student(Student&& other) noexcept{   //move constructor
+   cout<<"Move constructor called"<< endl;
+   age = other.age;
+   name = other.name;
+   other.name = nullptr;
+   other.age = nullptr;
+   }
 
-    friend istream& operator>>(istream& is, Complex& complex) {
-        cout << "Enter real part: ";
-        is >> complex.real;
-        cout << "Enter imaginary part: ";
-        is >> complex.imaginary;
-        return is;
-    }
+   ~Student(){
+      delete name;
+      delete age;
+   }
+
+
+ void display(){
+    cout<<"This is the object of "<< *name << " whose age is "<< *age<<endl;
+ }
 };
 
-int main() {
-    Complex c1(2.0, 3.0);
-    Complex c2(1.0, 4.0);
+int main(){
+    Student s("Bikash",19), s2("Ayush",20), s3;
+    Student Ayush(s2);
+    s.display(); // calling parameterized constructor
+    Ayush.display(); // calling copy constructor
+    s3.display(); // calling default constructor
+    Student newS(move(s));
+    newS.display();
 
-    // Addition
-    Complex sum = c1 + c2;
-    cout << "Sum: " << sum << endl;
-
-    // Multiplication
-    Complex product = c1 * c2;
-    cout << "Product: " << product << endl;
-
-    // Read complex number from user
-    Complex c3;
-    cout << "Enter a complex number:" << endl;
-    cin >> c3;
-    cout << "You entered: " << c3 << endl;
-
-    return 0;
 }
-
+      
